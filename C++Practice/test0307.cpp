@@ -2,7 +2,7 @@
 #include <string>   // .h‚Í‚Â‚¯‚È‚¢
 using namespace std;
 
-int main(void) {
+int main2(void) {
 	cout << "aaa\n";
 
 	int aaa = 8;
