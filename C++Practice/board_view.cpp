@@ -1,31 +1,34 @@
 #include <iostream>
 #include "board_view.hpp"
 
+using namespace std;
+
 // 盤面の表示
 void show_board(Board& board) {
 
-	for (int x = 0; x < 10; x++) {
-		for (int y = 0; y < 10; y++) {
+	// xを内側のループにする。
+	for (int y = 0; y < 10; y++) {
+		for (int x = 0; x < 10; x++) {
 			switch (board[x][y])
 			{
 			case Cell::White:
-				std::cout << "○";
+				cout << "○";
 				break;
 
 			case Cell::Black:
-				std::cout << "●";
+				cout << "●";
 				break;
 
 			case Cell::Sentinel:
-				//std::cout << "-";
+				// cout << "△";
 				break;
 
 			default:
-				std::cout << "-";
+				cout << "-";
 				break;
 			}
 		}
-		std::cout << std::endl;
+		cout << endl;
 	}
 }
 
@@ -33,9 +36,9 @@ void show_board(Board& board) {
 void show_player(Player player) {
 	
 	if (player == Player::Black) {
-		std::cout << "黒の手番です" << std::endl;
+		cout << "黒の手番です" << endl;
 	} else {
-		std::cout << "白の手番です" << std::endl;
+		cout << "白の手番です" << endl;
 	}
 }
 
