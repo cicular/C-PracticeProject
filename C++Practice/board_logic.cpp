@@ -1,5 +1,5 @@
 #include <iostream>
-#include <map>
+#include <vector>
 #include "board_logic.hpp"
 
 using namespace std;
@@ -41,7 +41,7 @@ bool is_legal_move(Board& board, int x_int, int y_int, Player player) {
 		return false;
 	}
 
-	std::cout << "入力された座標は、" << to_string(x_int) << to_string(y_int) << std::endl;
+	// std::cout << "入力された座標は、" << to_string(x_int) << to_string(y_int) << std::endl;
 
 	// そもそもそのセルがEmptyであること
 	if (board[x_int][y_int] != Cell::Empty) {
@@ -66,7 +66,7 @@ bool is_legal_move(Board& board, int x_int, int y_int, Player player) {
 						xxi += xi;
 						yyi += yi;
 
-						cout << to_string(xxi) << to_string(yyi) << endl;
+						// cout << to_string(xxi) << to_string(yyi) << endl;
 
 						if (board[xxi][yyi] == allyStone) {
 							// cout << "隣接するセルの方角に、自分の石がありました。" << endl;
@@ -88,7 +88,7 @@ bool is_legal_move(Board& board, int x_int, int y_int, Player player) {
 
 void place_stone(Board& board, int x_int, int y_int, Player player) {
 
-	cout << "石のひっくり返し処理を開始します。" << endl;
+	cout << "石のひっくり返し処理を開始します。";
 
 	Cell enemyStone = player == Player::Black ? Cell::White : Cell::Black;
 	Cell allyStone = player == Player::Black ? Cell::Black : Cell::White;
@@ -96,7 +96,9 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 	std::cout << "入力された座標は、" << to_string(x_int) << to_string(y_int) << std::endl;
 	board[x_int][y_int] = allyStone;
 
-	map<int, int> cell_map;
+	// mapだと、キー重複ができないため、x軸でひっくり返す石が複数ある時、最初の1つしか反転できない。
+	// そのため、<pair<int, int>をvectorで保持する
+	vector<pair<int, int>> cell_vector;
 
 	// 置かれたセルを起点にして全方向探索
 	for (int xi = -1; xi <= 1; xi++) {
@@ -110,7 +112,6 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 
 				int nextCellX = xxi;
 				int nextCellY = yyi;
-				// cell_map.insert(std::make_pair(xxi, yyi));
 
 				while (true) {
 					xxi += xi;
@@ -121,10 +122,12 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 					if (board[xxi][yyi] == allyStone) {
 						// cout << "隣接するセルの方角に、自分の石がありました。" << endl;
 
-						cell_map.insert(std::make_pair(nextCellX, nextCellY));
-						
+						cell_vector.emplace_back(std::make_pair(nextCellX, nextCellY));
+						cout << "cell_vectorに追加した1：" << to_string(nextCellX) << to_string(nextCellY) << "cell_mapの要素数：";
+						cout << to_string(cell_vector.size()) << endl;
+
 						// https://www.delftstack.com/ja/howto/cpp/how-to-iterate-over-map-in-cpp/
-						for (const auto& item : cell_map) {
+						for (const auto& item : cell_vector) {
 							// cout << "[" << to_string(item.first) << "," << to_string(item.second) << "]" << endl;
 							board[item.first][item.second] = allyStone;
 						}
@@ -132,7 +135,8 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 					}
 
 					if (board[xxi][yyi] == enemyStone) {
-						cell_map.insert(std::make_pair(xxi, yyi));
+						cell_vector.emplace_back(std::make_pair(xxi, yyi));
+						cout << "cell_vectorに追加した2：" << to_string(xxi) << to_string(yyi) << endl;
 						continue;
 					}
 
@@ -150,7 +154,7 @@ bool is_board_full(Board& board) {
 	for (int x = 0; x < 10; x++) {
 		for (int y = 0; y < 10; y++) {
 			if (board[x][y] == Cell::Empty) {
-				cout << "満盤ではない" << endl;
+				// cout << "満盤ではない" << endl;
 				return false;
 			}
 		}
