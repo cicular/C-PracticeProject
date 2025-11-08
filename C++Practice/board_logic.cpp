@@ -96,9 +96,10 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 	std::cout << "入力された座標は、" << to_string(x_int) << to_string(y_int) << std::endl;
 	board[x_int][y_int] = allyStone;
 
+	// 反転させる対象の石
 	// mapだと、キー重複ができないため、x軸でひっくり返す石が複数ある時、最初の1つしか反転できない。
 	// そのため、<pair<int, int>をvectorで保持する
-	vector<pair<int, int>> cell_vector;
+	vector<pair<int, int>> reverseCellsVector;
 
 	// 置かれたセルを起点にして全方向探索
 	for (int xi = -1; xi <= 1; xi++) {
@@ -107,12 +108,16 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 			int xxi = x_int + xi;
 			int yyi = y_int + yi;
 			// cout << to_string(xxi) << to_string(yyi) << endl;
+			// 隣接するセルに、敵の石があるか？
 			if (board[xxi][yyi] == enemyStone) {
-				// cout << "隣接するセルに、敵の石がありました。" << endl;
 
 				int nextCellX = xxi;
 				int nextCellY = yyi;
 
+				// 反転させるかもしれない対象の石
+				vector<pair<int, int>> reverseCandidateCellsVector;
+
+				// 隣接する敵の石の方角に向かって、自分の石または番兵にぶつかるまで探索する
 				while (true) {
 					xxi += xi;
 					yyi += yi;
@@ -122,12 +127,16 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 					if (board[xxi][yyi] == allyStone) {
 						// cout << "隣接するセルの方角に、自分の石がありました。" << endl;
 
-						cell_vector.emplace_back(std::make_pair(nextCellX, nextCellY));
-						cout << "cell_vectorに追加した1：" << to_string(nextCellX) << to_string(nextCellY) << "cell_mapの要素数：";
-						cout << to_string(cell_vector.size()) << endl;
+						reverseCellsVector.emplace_back(std::make_pair(nextCellX, nextCellY));
+						cout << "reverseCellsVectorに追加した：" << to_string(nextCellX) << to_string(nextCellY) << "cell_mapの要素数：";
+						cout << to_string(reverseCellsVector.size()) << endl;
+
+						for (const auto& item : reverseCandidateCellsVector) {
+							reverseCellsVector.emplace_back(item);
+						}
 
 						// https://www.delftstack.com/ja/howto/cpp/how-to-iterate-over-map-in-cpp/
-						for (const auto& item : cell_vector) {
+						for (const auto& item : reverseCellsVector) {
 							// cout << "[" << to_string(item.first) << "," << to_string(item.second) << "]" << endl;
 							board[item.first][item.second] = allyStone;
 						}
@@ -135,8 +144,8 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 					}
 
 					if (board[xxi][yyi] == enemyStone) {
-						cell_vector.emplace_back(std::make_pair(xxi, yyi));
-						cout << "cell_vectorに追加した2：" << to_string(xxi) << to_string(yyi) << endl;
+						reverseCandidateCellsVector.emplace_back(std::make_pair(xxi, yyi));
+						cout << "reverseCandidateCellsVectorに追加した：" << to_string(xxi) << to_string(yyi) << endl;
 						continue;
 					}
 
