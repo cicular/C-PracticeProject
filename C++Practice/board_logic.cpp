@@ -1,4 +1,5 @@
 #include <iostream>
+#include <map>
 #include "board_logic.hpp"
 
 using namespace std;
@@ -35,7 +36,10 @@ void init_board(Board& board) {
 
 bool is_legal_move(Board& board, int x_int, int y_int, Player player) {
 
-	if (x_int == -1) return false;
+	if (x_int == -1) {
+		cout << "不正な手なので、再入力してくださいね？？" << endl;
+		return false;
+	}
 
 	std::cout << "入力された座標は、" << to_string(x_int) << to_string(y_int) << std::endl;
 
@@ -44,7 +48,7 @@ bool is_legal_move(Board& board, int x_int, int y_int, Player player) {
 		return false;
 	}
 	else {
-		Cell compareCell = player == Player::Black ? Cell::White : Cell::Black;
+		Cell enemyStone = player == Player::Black ? Cell::White : Cell::Black;
 		Cell allyStone = player == Player::Black ? Cell::Black : Cell::White;
 
 		// 置かれたセルを起点にして全方向探索
@@ -53,11 +57,11 @@ bool is_legal_move(Board& board, int x_int, int y_int, Player player) {
 				
 				int xxi = x_int + xi;
 				int yyi = y_int + yi;
-				cout << to_string(xxi) << to_string(yyi) << endl;
-				if (board[xxi][yyi] == compareCell) {
-					cout << "隣接するセルに、敵の石がありました。" << endl;
+				// cout << to_string(xxi) << to_string(yyi) << endl;
+				if (board[xxi][yyi] == enemyStone) {
+					// cout << "隣接するセルに、敵の石がありました。" << endl;
 
-					// while (board[xxi][yyi] == compareCell) {
+					// while (board[xxi][yyi] == enemyStone) {
 					while (true) {
 						xxi += xi;
 						yyi += yi;
@@ -65,7 +69,7 @@ bool is_legal_move(Board& board, int x_int, int y_int, Player player) {
 						cout << to_string(xxi) << to_string(yyi) << endl;
 
 						if (board[xxi][yyi] == allyStone) {
-							cout << "隣接するセルの方角に、自分の石がありました。" << endl;
+							// cout << "隣接するセルの方角に、自分の石がありました。" << endl;
 							return true;
 						}
 
@@ -78,6 +82,7 @@ bool is_legal_move(Board& board, int x_int, int y_int, Player player) {
 		}
 	}
 
+	cout << "不正な手なので、再入力してくださいね？？" << endl;
 	return false;
 }
 
@@ -85,8 +90,13 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 
 	cout << "石のひっくり返し処理を開始します。" << endl;
 
-	Cell compareCell = player == Player::Black ? Cell::White : Cell::Black;
+	Cell enemyStone = player == Player::Black ? Cell::White : Cell::Black;
 	Cell allyStone = player == Player::Black ? Cell::Black : Cell::White;
+
+	std::cout << "入力された座標は、" << to_string(x_int) << to_string(y_int) << std::endl;
+	board[x_int][y_int] = allyStone;
+
+	map<int, int> cell_map;
 
 	// 置かれたセルを起点にして全方向探索
 	for (int xi = -1; xi <= 1; xi++) {
@@ -94,33 +104,41 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 
 			int xxi = x_int + xi;
 			int yyi = y_int + yi;
-			cout << to_string(xxi) << to_string(yyi) << endl;
-			if (board[xxi][yyi] == compareCell) {
-				cout << "隣接するセルに、敵の石がありました。" << endl;
+			// cout << to_string(xxi) << to_string(yyi) << endl;
+			if (board[xxi][yyi] == enemyStone) {
+				// cout << "隣接するセルに、敵の石がありました。" << endl;
+
+				int nextCellX = xxi;
+				int nextCellY = yyi;
+				// cell_map.insert(std::make_pair(xxi, yyi));
 
 				while (true) {
 					xxi += xi;
 					yyi += yi;
 
-					cout << to_string(xxi) << to_string(yyi) << endl;
+					// cout << to_string(xxi) << to_string(yyi) << endl;
 
 					if (board[xxi][yyi] == allyStone) {
-						cout << "隣接するセルの方角に、自分の石がありました。" << endl;
+						// cout << "隣接するセルの方角に、自分の石がありました。" << endl;
+
+						cell_map.insert(std::make_pair(nextCellX, nextCellY));
 						
+						// https://www.delftstack.com/ja/howto/cpp/how-to-iterate-over-map-in-cpp/
+						for (const auto& item : cell_map) {
+							// cout << "[" << to_string(item.first) << "," << to_string(item.second) << "]" << endl;
+							board[item.first][item.second] = allyStone;
+						}
+						break;
 					}
 
-					if (board[xxi][yyi] == compareCell) {
-						board[xxi][yyi] = allyStone;
+					if (board[xxi][yyi] == enemyStone) {
+						cell_map.insert(std::make_pair(xxi, yyi));
+						continue;
 					}
 
 					if (board[xxi][yyi] == Cell::Sentinel) {
 						break;
 					}
-
-					//						if (board[xxi][yyi] == Cell::Black) {
-						//						return true;
-							//				}
-
 				}
 			}
 		}
@@ -141,8 +159,24 @@ bool is_board_full(Board& board) {
 	return true;
 }
 
-int judge_winner() {
-	return 0;
+int judge_winner(Board& board) {
+
+	int numOfBlack = 0;
+	int numOfWhite = 0;
+	for (int x = 0; x < 10; x++) {
+		for (int y = 0; y < 10; y++) {
+			if (board[x][y] == Cell::Sentinel) continue;
+			
+			if (board[x][y] == Cell::Black) numOfBlack++;
+			
+			if (board[x][y] == Cell::White) numOfWhite++;
+		}
+	}
+
+	if (numOfBlack == numOfWhite) return 0;
+
+	return numOfWhite < numOfBlack ? 1 : 2;
+
 }
 
 int convertAlphabetToNum(string input) {
@@ -183,9 +217,7 @@ int convertAlphabetToNum(string input) {
 }
 
 int getYinput(string input) {
-	string y_str = input.substr(1, 2);
-	// int型に変換
-	int y_int = stoi(y_str);
 
-	return y_int;
+	// int型に変換して返却
+	return stoi(input.substr(1, 2));
 }

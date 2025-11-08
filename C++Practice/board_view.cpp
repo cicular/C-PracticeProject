@@ -35,14 +35,22 @@ void show_board(Board& board) {
 // 手番の表示（黒番or白番どちらの手番かを標準出力）
 void show_player(Player player) {
 	
-	if (player == Player::Black) {
-		cout << "黒の手番です" << endl;
-	} else {
-		cout << "白の手番です" << endl;
-	}
+	string consoleOutput = player == Player::Black ? "黒の手番です" : "白の手番です";
+	cout << consoleOutput << endl;
 }
 
 // 勝者を表示
-void show_winner() {
+void show_winner(int result) {
 
+	switch (result) {
+		case 1:
+			cout << "黒の勝ちです" << endl;
+			break;
+		case 2:
+			cout << "白の勝ちです" << endl;
+			break;
+		default:
+			cout << "接戦でしたね。引き分けです" << endl;
+			break;
+	}
 }
