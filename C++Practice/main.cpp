@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cstdlib>
 #include "board_view.hpp"
 #include "board_logic.hpp"
 
@@ -8,6 +9,8 @@ using namespace std;
 int main() {
 
 	cout << "オセロスタート！！" << endl;
+
+	system("color f0");
 
 	Board board;
 
@@ -48,9 +51,11 @@ int main() {
 	// 盤面の表示
 	show_board(board);
 
-	#ifdef DEBUG
+	#ifndef DEBUG
 	// 勝利判定
-	judge_winner();
+	int result = judge_winner(board);
+
+	show_winner(result);
 	#endif
 
 	return 0;
