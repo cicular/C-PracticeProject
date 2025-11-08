@@ -94,12 +94,14 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 	Cell allyStone = player == Player::Black ? Cell::Black : Cell::White;
 
 	std::cout << "入力された座標は、" << to_string(x_int) << to_string(y_int) << std::endl;
-	board[x_int][y_int] = allyStone;
 
 	// 反転させる対象の石
 	// mapだと、キー重複ができないため、x軸でひっくり返す石が複数ある時、最初の1つしか反転できない。
 	// そのため、<pair<int, int>をvectorで保持する
 	vector<pair<int, int>> reverseCellsVector;
+
+	// まず入力座標を反転対象ベクターに追加
+	reverseCellsVector.emplace_back(std::make_pair(x_int, y_int));
 
 	// 置かれたセルを起点にして全方向探索
 	for (int xi = -1; xi <= 1; xi++) {
@@ -128,24 +130,19 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 						// cout << "隣接するセルの方角に、自分の石がありました。" << endl;
 
 						reverseCellsVector.emplace_back(std::make_pair(nextCellX, nextCellY));
-						cout << "reverseCellsVectorに追加した：" << to_string(nextCellX) << to_string(nextCellY) << "cell_mapの要素数：";
+						// cout << "reverseCellsVectorに追加した：" << to_string(nextCellX) << to_string(nextCellY) << "cell_mapの要素数：";
 						cout << to_string(reverseCellsVector.size()) << endl;
 
+						// 反転対象ベクターに追加
 						for (const auto& item : reverseCandidateCellsVector) {
 							reverseCellsVector.emplace_back(item);
-						}
-
-						// https://www.delftstack.com/ja/howto/cpp/how-to-iterate-over-map-in-cpp/
-						for (const auto& item : reverseCellsVector) {
-							// cout << "[" << to_string(item.first) << "," << to_string(item.second) << "]" << endl;
-							board[item.first][item.second] = allyStone;
 						}
 						break;
 					}
 
 					if (board[xxi][yyi] == enemyStone) {
 						reverseCandidateCellsVector.emplace_back(std::make_pair(xxi, yyi));
-						cout << "reverseCandidateCellsVectorに追加した：" << to_string(xxi) << to_string(yyi) << endl;
+						// cout << "reverseCandidateCellsVectorに追加した：" << to_string(xxi) << to_string(yyi) << endl;
 						continue;
 					}
 
@@ -156,6 +153,15 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 			}
 		}
 	}
+
+	// 反転処理
+	// https://www.delftstack.com/ja/howto/cpp/how-to-iterate-over-map-in-cpp/
+	for (const auto& item : reverseCellsVector) {
+		// cout << "[" << to_string(item.first) << "," << to_string(item.second) << "]" << endl;
+		board[item.first][item.second] = allyStone;
+	}
+
+	cout << to_string(reverseCellsVector.size() - 1) << "個のセルを反転させました。" << endl;
 }
 
 bool is_board_full(Board& board) {
