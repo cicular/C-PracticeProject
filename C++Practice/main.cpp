@@ -48,19 +48,15 @@ int main() {
 		} while (!is_legal_move(board, x_input, y_input, player, true));
 		//石を配置する
 		place_stone(board, x_input, y_input, player);
-
+		// 手番変更
 		player = player == Player::Black ? Player::White : Player::Black;
 
 	}
 	// 盤面の表示
 	show_board(board);
 
-	#ifndef DEBUG
-	// 勝利判定
-	int result = judge_winner(board);
-
-	show_winner(result);
-	#endif
+	// 勝利判定と表示
+	show_winner(judge_winner(board));
 
 	return 0;
 }

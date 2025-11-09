@@ -80,6 +80,9 @@ bool is_legal_move(Board& board, int x_int, int y_int, Player player, bool conso
 	return false;
 }
 
+/*
+	石のひっくり返し処理
+*/
 void place_stone(Board& board, int x_int, int y_int, Player player) {
 
 	cout << "石のひっくり返し処理を開始します。";
@@ -160,6 +163,7 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 // 黒/白ともに打てるセルが存在しなくなったか判定
 bool is_board_full(Board& board, Player* player) {
 
+	// 64マス全て埋まった場合に「パスします」メッセージを出さないためにまずは全件チェック
 	int numOfEmpty = 0;
 	for (int x = 1; x < 9; x++) {
 		for (int y = 1; y < 9; y++) {
