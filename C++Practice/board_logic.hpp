@@ -20,13 +20,13 @@ using Board = std::array<std::array<Cell, 10>, 10>;
 void init_board(Board& board);
 
 // 合法手判定（合法手ならtrueを返し、不正手ならfalseを返す） ※メソッド名は変えないでください。引数と戻り値は変更可
-bool is_legal_move(Board& board, int x_input, int y_input, Player player);
+bool is_legal_move(Board& board, int x_input, int y_input, Player player, bool consoleOutput);
 
 //石を配置し、ひっくり返す ※メソッド名は変えないでください。引数と戻り値は変更可
 void place_stone(Board& board, int x_input, int y_input, Player player);
 
 // 終了（満盤）判定（石が置けるマスがあるか判定。満盤ならtrue）※メソッド名と戻り値は変えないでください。引数と変更可
-bool is_board_full(Board& board);
+bool is_board_full(Board& board, Player* player);
 
 // ゲームの勝者を判定（黒石の数/白石の数を数える）※メソッド名と戻り値は変えないでください。引数は変更可
 int judge_winner(Board& board);

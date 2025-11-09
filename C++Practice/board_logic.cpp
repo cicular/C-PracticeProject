@@ -30,16 +30,19 @@ void init_board(Board& board) {
 	board[5][5] = Cell::White;
 }
 
-bool is_legal_move(Board& board, int x_int, int y_int, Player player) {
+/*
+	合法手判定
+*/
+bool is_legal_move(Board& board, int x_int, int y_int, Player player, bool consoleOutput) {
 
 	if (x_int == -1 || y_int < 1 || y_int > 8) {
-		cout << "不正な手なので、再入力してくださいね？？" << endl;
+		if (consoleOutput) cout << "不正な手なので、再入力してくださいね？？" << endl;
 		return false;
 	}
 
 	// そもそもそのセルがEmptyであること
 	if (board[x_int][y_int] != Cell::Empty) {
-		cout << "不正な手なので、再入力してくださいね？？" << endl;
+		if (consoleOutput) cout << "不正な手なので、再入力してくださいね？？" << endl;
 		return false;
 	}
 
@@ -53,7 +56,7 @@ bool is_legal_move(Board& board, int x_int, int y_int, Player player) {
 			int xxi = x_int + xi;
 			int yyi = y_int + yi;
 			// cout << to_string(xxi) << to_string(yyi) << endl;
-			// 隣接するセルに敵の石が存在するか
+			// 隣接する8個のセルに敵の石が存在するか
 			if (board[xxi][yyi] == enemyStone) {
 
 				while (true) {
@@ -63,8 +66,9 @@ bool is_legal_move(Board& board, int x_int, int y_int, Player player) {
 					// cout << to_string(xxi) << to_string(yyi) << endl;
 
 					// 隣接するセルの方角に、自分の石が存在するか
-					if (board[xxi][yyi] == allyStone) return true;
-
+					if (board[xxi][yyi] == allyStone) {
+						return true;
+					}
 					// 番兵にぶつかったら終端なのでループを抜ける
 					if (board[xxi][yyi] == Cell::Sentinel) break;
 				}
@@ -72,7 +76,7 @@ bool is_legal_move(Board& board, int x_int, int y_int, Player player) {
 		}
 	}
 
-	cout << "不正な手なので、再入力してくださいね？？" << endl;
+	if (consoleOutput) cout << "不正な手なので、再入力してくださいね？？" << endl;
 	return false;
 }
 
@@ -143,7 +147,7 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 		}
 	}
 
-	// 反転処理
+	// 最後にまとめて反転処理
 	// https://www.delftstack.com/ja/howto/cpp/how-to-iterate-over-map-in-cpp/
 	for (const auto& item : reverseCellsVector) {
 		// cout << "[" << to_string(item.first) << "," << to_string(item.second) << "]" << endl;
@@ -153,21 +157,38 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 	cout << to_string(reverseCellsVector.size() - 1) << "個のセルを反転させました。" << endl;
 }
 
-// すべてのセルがEmptyでない、または、黒/白ともに打てるセルが存在しない
-bool is_board_full(Board& board) {
+// 黒/白ともに打てるセルが存在しなくなったか判定
+bool is_board_full(Board& board, Player* player) {
 
-	for (int x = 0; x < 10; x++) {
-		for (int y = 0; y < 10; y++) {
+	for (int x = 1; x < 9; x++) {
+		for (int y = 1; y < 9; y++) {
 			if (board[x][y] == Cell::Empty) {
-				// cout << "満盤ではない" << endl;
-				return false;
+				if (is_legal_move(board, x, y, *player, false)) {
+					// まだ石を置ける座標があった
+					return false;
+				}
 			}
 		}
 	}
 
+	// 手番を変更
+	cout << "石を置けるセルがないため、パスします" << endl;
+	*player = *player == Player::Black ? Player::White : Player::White;
+
+	for (int x = 1; x < 9; x++) {
+		for (int y = 1; y < 9; y++) {
+			if (board[x][y] == Cell::Empty) {
+				if (is_legal_move(board, x, y, *player, false)) {
+					// まだ石を置ける座標があった
+					return false;
+				}
+			}
+		}
+	}
+
+	// 黒・白ともに石を置けるセルが存在しないため、対局終了
 	return true;
 }
-
 
 // 勝者判定
 int judge_winner(Board& board) {
