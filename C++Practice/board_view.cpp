@@ -7,8 +7,8 @@ using namespace std;
 void show_board(Board& board) {
 
 	// x‚ğ“à‘¤‚Ìƒ‹[ƒv‚É‚·‚éB
-	for (int y = 0; y < 10; y++) {
-		for (int x = 0; x < 10; x++) {
+	for (int y = 1; y < 9; y++) {
+		for (int x = 1; x < 9; x++) {
 			switch (board[x][y])
 			{
 			case Cell::White:
@@ -17,10 +17,6 @@ void show_board(Board& board) {
 
 			case Cell::Black:
 				cout << "œ";
-				break;
-
-			case Cell::Sentinel:
-				// cout << "¢";
 				break;
 
 			default:
