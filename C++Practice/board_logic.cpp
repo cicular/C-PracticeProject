@@ -9,10 +9,8 @@ using namespace std;
 */
 void init_board(Board& board) {
 
-	cout << "盤面の初期表示を開始します" << endl;
-
-	for (int x = 0; x < 10; x++) {
-		for (int y = 0; y < 10; y++) {
+	for (int x = 1; x < 9; x++) {
+		for (int y = 1; y < 9; y++) {
 			board[x][y] = Cell::Empty;
 		}
 	}
@@ -30,13 +28,11 @@ void init_board(Board& board) {
 	board[4][5] = Cell::Black;
 	board[5][4] = Cell::Black;
 	board[5][5] = Cell::White;
-
-	cout << "盤面の初期表示をしました。" << endl;
 }
 
 bool is_legal_move(Board& board, int x_int, int y_int, Player player) {
 
-	if (x_int == -1) {
+	if (x_int == -1 || y_int < 1 || y_int > 8) {
 		cout << "不正な手なので、再入力してくださいね？？" << endl;
 		return false;
 	}
@@ -53,28 +49,24 @@ bool is_legal_move(Board& board, int x_int, int y_int, Player player) {
 	// 置かれたセルを起点にして全方向探索
 	for (int xi = -1; xi <= 1; xi++) {
 		for (int yi = -1; yi <= 1; yi++) {
-				
+
 			int xxi = x_int + xi;
 			int yyi = y_int + yi;
 			// cout << to_string(xxi) << to_string(yyi) << endl;
+			// 隣接するセルに敵の石が存在するか
 			if (board[xxi][yyi] == enemyStone) {
-				// cout << "隣接するセルに、敵の石がありました。" << endl;
 
-				// while (board[xxi][yyi] == enemyStone) {
 				while (true) {
 					xxi += xi;
 					yyi += yi;
 
 					// cout << to_string(xxi) << to_string(yyi) << endl;
 
-					if (board[xxi][yyi] == allyStone) {
-						// cout << "隣接するセルの方角に、自分の石がありました。" << endl;
-						return true;
-					}
+					// 隣接するセルの方角に、自分の石が存在するか
+					if (board[xxi][yyi] == allyStone) return true;
 
-					if (board[xxi][yyi] == Cell::Sentinel) {
-						break;
-					}
+					// 番兵にぶつかったら終端なのでループを抜ける
+					if (board[xxi][yyi] == Cell::Sentinel) break;
 				}
 			}
 		}
@@ -91,7 +83,7 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 	Cell enemyStone = player == Player::Black ? Cell::White : Cell::Black;
 	Cell allyStone = player == Player::Black ? Cell::Black : Cell::White;
 
-	std::cout << "入力された座標は、" << to_string(x_int) << to_string(y_int) << std::endl;
+	cout << "入力された座標は、" << to_string(x_int) << to_string(y_int) << endl;
 
 	// 反転させる対象の石
 	// mapだと、キー重複ができないため、x軸でひっくり返す石が複数ある時、最初の1つしか反転できない。
@@ -145,7 +137,7 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 					}
 
 					if (board[xxi][yyi] == Cell::Sentinel) break;
-					
+
 				}
 			}
 		}
@@ -161,6 +153,7 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 	cout << to_string(reverseCellsVector.size() - 1) << "個のセルを反転させました。" << endl;
 }
 
+// すべてのセルがEmptyでない、または、黒/白ともに打てるセルが存在しない
 bool is_board_full(Board& board) {
 
 	for (int x = 0; x < 10; x++) {
@@ -175,23 +168,20 @@ bool is_board_full(Board& board) {
 	return true;
 }
 
+
+// 勝者判定
 int judge_winner(Board& board) {
 
 	int numOfBlack = 0;
 	int numOfWhite = 0;
-	for (int x = 0; x < 10; x++) {
-		for (int y = 0; y < 10; y++) {
-			if (board[x][y] == Cell::Sentinel) continue;
-			
+	for (int x = 1; x < 9; x++) {
+		for (int y = 1; y < 9; y++) {
 			if (board[x][y] == Cell::Black) numOfBlack++;
-			
 			if (board[x][y] == Cell::White) numOfWhite++;
 		}
 	}
 
-	if (numOfBlack == numOfWhite) return 0;
-
-	return numOfWhite < numOfBlack ? 1 : 2;
+	return numOfBlack == numOfWhite ? 0 : numOfWhite < numOfBlack ? 1 : 2;
 
 }
 
@@ -200,10 +190,8 @@ int convertAlphabetToNum(string input) {
 
 	char x_alphabet = input.front();
 
-	if (x_alphabet >= 'A' && x_alphabet <= 'H') {
-		cout << "適性値" << endl;
-		 return x_alphabet - 'A' + 1;
-	}
+	// Aの文字コードは10進数で65
+	if (x_alphabet >= 'A' && x_alphabet <= 'H') return x_alphabet - 'A' + 1;
 
 	return -1;
 
