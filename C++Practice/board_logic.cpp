@@ -125,7 +125,7 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 
 						reverseCellsVector.emplace_back(std::make_pair(nextCellX, nextCellY));
 						// cout << "reverseCellsVectorに追加した：" << to_string(nextCellX) << to_string(nextCellY) << "cell_mapの要素数：";
-						cout << to_string(reverseCellsVector.size()) << endl;
+						// cout << to_string(reverseCellsVector.size()) << endl;
 
 						// 反転対象ベクターに追加
 						for (const auto& item : reverseCandidateCellsVector) {
@@ -160,6 +160,17 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 // 黒/白ともに打てるセルが存在しなくなったか判定
 bool is_board_full(Board& board, Player* player) {
 
+	int numOfEmpty = 0;
+	for (int x = 1; x < 9; x++) {
+		for (int y = 1; y < 9; y++) {
+			if (board[x][y] == Cell::Empty) {
+				numOfEmpty++;
+			}
+		}
+	}
+
+	if (numOfEmpty == 0) return true;
+
 	for (int x = 1; x < 9; x++) {
 		for (int y = 1; y < 9; y++) {
 			if (board[x][y] == Cell::Empty) {
@@ -173,7 +184,7 @@ bool is_board_full(Board& board, Player* player) {
 
 	// 手番を変更
 	cout << "石を置けるセルがないため、パスします" << endl;
-	*player = *player == Player::Black ? Player::White : Player::White;
+	*player = *player == Player::Black ? Player::White : Player::Black;
 
 	for (int x = 1; x < 9; x++) {
 		for (int y = 1; y < 9; y++) {
