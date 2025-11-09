@@ -41,41 +41,39 @@ bool is_legal_move(Board& board, int x_int, int y_int, Player player) {
 		return false;
 	}
 
-	// std::cout << "入力された座標は、" << to_string(x_int) << to_string(y_int) << std::endl;
-
 	// そもそもそのセルがEmptyであること
 	if (board[x_int][y_int] != Cell::Empty) {
+		cout << "不正な手なので、再入力してくださいね？？" << endl;
 		return false;
 	}
-	else {
-		Cell enemyStone = player == Player::Black ? Cell::White : Cell::Black;
-		Cell allyStone = player == Player::Black ? Cell::Black : Cell::White;
 
-		// 置かれたセルを起点にして全方向探索
-		for (int xi = -1; xi <= 1; xi++) {
-			for (int yi = -1; yi <= 1; yi++) {
+	Cell enemyStone = player == Player::Black ? Cell::White : Cell::Black;
+	Cell allyStone = player == Player::Black ? Cell::Black : Cell::White;
+
+	// 置かれたセルを起点にして全方向探索
+	for (int xi = -1; xi <= 1; xi++) {
+		for (int yi = -1; yi <= 1; yi++) {
 				
-				int xxi = x_int + xi;
-				int yyi = y_int + yi;
-				// cout << to_string(xxi) << to_string(yyi) << endl;
-				if (board[xxi][yyi] == enemyStone) {
-					// cout << "隣接するセルに、敵の石がありました。" << endl;
+			int xxi = x_int + xi;
+			int yyi = y_int + yi;
+			// cout << to_string(xxi) << to_string(yyi) << endl;
+			if (board[xxi][yyi] == enemyStone) {
+				// cout << "隣接するセルに、敵の石がありました。" << endl;
 
-					// while (board[xxi][yyi] == enemyStone) {
-					while (true) {
-						xxi += xi;
-						yyi += yi;
+				// while (board[xxi][yyi] == enemyStone) {
+				while (true) {
+					xxi += xi;
+					yyi += yi;
 
-						// cout << to_string(xxi) << to_string(yyi) << endl;
+					// cout << to_string(xxi) << to_string(yyi) << endl;
 
-						if (board[xxi][yyi] == allyStone) {
-							// cout << "隣接するセルの方角に、自分の石がありました。" << endl;
-							return true;
-						}
+					if (board[xxi][yyi] == allyStone) {
+						// cout << "隣接するセルの方角に、自分の石がありました。" << endl;
+						return true;
+					}
 
-						if (board[xxi][yyi] == Cell::Sentinel) {
-							break;
-						}
+					if (board[xxi][yyi] == Cell::Sentinel) {
+						break;
 					}
 				}
 			}
@@ -146,9 +144,8 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 						continue;
 					}
 
-					if (board[xxi][yyi] == Cell::Sentinel) {
-						break;
-					}
+					if (board[xxi][yyi] == Cell::Sentinel) break;
+					
 				}
 			}
 		}
@@ -198,41 +195,18 @@ int judge_winner(Board& board) {
 
 }
 
+// 文字コードを利用してint型に変換
 int convertAlphabetToNum(string input) {
 
-	string x_alphabet = input.substr(0, 1);
+	char x_alphabet = input.front();
 
-	int x_int;
-
-	if (x_alphabet == "A") {
-		x_int = 1;
-	}
-	else if (x_alphabet == "B") {
-		x_int = 2;
-	}
-	else if (x_alphabet == "C") {
-		x_int = 3;
-	}
-	else if (x_alphabet == "D") {
-		x_int = 4;
-	}
-	else if (x_alphabet == "E") {
-		x_int = 5;
-	}
-	else if (x_alphabet == "F") {
-		x_int = 6;
-	}
-	else if (x_alphabet == "G") {
-		x_int = 7;
-	}
-	else if (x_alphabet == "H") {
-		x_int = 8;
-	}
-	else {
-		x_int = -1;
+	if (x_alphabet >= 'A' && x_alphabet <= 'H') {
+		cout << "適性値" << endl;
+		 return x_alphabet - 'A' + 1;
 	}
 
-	return x_int;
+	return -1;
+
 }
 
 int getYinput(string input) {
