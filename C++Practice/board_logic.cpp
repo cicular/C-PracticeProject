@@ -116,7 +116,7 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 				// ”½“]‚³‚¹‚é‚©‚à‚µ‚ê‚È‚¢‘ÎÛ‚ÌÎ
 				vector<pair<int, int>> reverseCandidateCellsVector;
 
-				// —×Ú‚·‚é“G‚ÌÎ‚Ì•ûŠp‚ÉŒü‚©‚Á‚ÄA©•ª‚ÌÎ‚Ü‚½‚Í”Ô•º‚É‚Ô‚Â‚©‚é‚Ü‚Å’Tõ‚·‚é
+				// —×Ú‚·‚é“G‚ÌÎ‚Ì•ûŠp‚ÉŒü‚©‚Á‚ÄA©•ª‚ÌÎ‚Ü‚½‚Í”Ô•º‚Ü‚½‚Í‹ó”’ƒZƒ‹‚É‚Ô‚Â‚©‚é‚Ü‚Å’Tõ‚·‚é
 				while (true) {
 					xxi += xi;
 					yyi += yi;
@@ -143,7 +143,7 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 						continue;
 					}
 
-					if (board[xxi][yyi] == Cell::Sentinel) break;
+					if (board[xxi][yyi] == Cell::Empty || board[xxi][yyi] == Cell::Sentinel) break;
 
 				}
 			}
