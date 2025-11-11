@@ -98,7 +98,7 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 	vector<pair<int, int>> reverseCellsVector;
 
 	// まず入力座標を反転対象ベクターに追加
-	reverseCellsVector.emplace_back(std::make_pair(x_int, y_int));
+	reverseCellsVector.emplace_back(make_pair(x_int, y_int));
 
 	// 置かれたセルを起点にして全方向探索
 	for (int xi = -1; xi <= 1; xi++) {
@@ -126,7 +126,7 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 					if (board[xxi][yyi] == allyStone) {
 						// cout << "隣接するセルの方角に、自分の石がありました。" << endl;
 
-						reverseCellsVector.emplace_back(std::make_pair(nextCellX, nextCellY));
+						reverseCellsVector.emplace_back(make_pair(nextCellX, nextCellY));
 						// cout << "reverseCellsVectorに追加した：" << to_string(nextCellX) << to_string(nextCellY) << "cell_mapの要素数：";
 						// cout << to_string(reverseCellsVector.size()) << endl;
 
@@ -138,7 +138,7 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 					}
 
 					if (board[xxi][yyi] == enemyStone) {
-						reverseCandidateCellsVector.emplace_back(std::make_pair(xxi, yyi));
+						reverseCandidateCellsVector.emplace_back(make_pair(xxi, yyi));
 						// cout << "reverseCandidateCellsVectorに追加した：" << to_string(xxi) << to_string(yyi) << endl;
 						continue;
 					}
@@ -224,7 +224,7 @@ int judge_winner(Board& board) {
 // 文字コードを利用してint型に変換
 int convertAlphabetToNum(string input) {
 
-	char x_alphabet = input.front();
+	char x_alphabet = toupper(input.front());
 
 	// Aの文字コードは10進数で65
 	if (x_alphabet >= 'A' && x_alphabet <= 'H') return x_alphabet - 'A' + 1;
