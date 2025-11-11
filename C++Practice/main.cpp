@@ -8,7 +8,7 @@
 using namespace std;
 
 // 関数プロトタイプ
-void makeBoardForTest1(Board& board);
+map<int, string> makeTestGameData1(string moves);
 
 int main() {
 
@@ -23,7 +23,7 @@ int main() {
 	// 盤面の生成
 	init_board(board);
 
-	int moveCount = 1;
+	int moveCount = 0;
 
 	// 終局までループ
 	while (!is_board_full(board, &player)) {
@@ -42,10 +42,10 @@ int main() {
 
 		do {
 #ifndef TEST
-			input = kifuMap.at(moveCount);
 			moveCount++;
+			input = kifuMap.at(moveCount);
 #else
-			// 盤上の座標は左上を原点として、横方向を a～h, 縦方向を 1～8 で表す。
+			// 盤上の座標は左上を原点として、横方向をa～h, 縦方向を1～8で表す。
 			// (例：左上隅はa1，右下隅は h8)
 			// 参考：https://www.othello.org/lesson/lesson/term.html
 			cout << "配置場所を入力してください (例: E6): " << endl;
