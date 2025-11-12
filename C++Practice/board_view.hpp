@@ -12,6 +12,6 @@ void show_player(Player player);
 void clear_screen();
 
 // 勝者を表示 ※メソッド名は変えないでください。引数と戻り値は変更可
-void show_winner(int result);
+void show_winner(int result, int numOfBlackStone, int numOfWhiteStone);
 
 // ※必要に応じてメソッドの追加可

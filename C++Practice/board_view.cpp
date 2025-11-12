@@ -36,7 +36,7 @@ void show_player(Player player) {
 }
 
 // 勝者を表示
-void show_winner(int result) {
+void show_winner(int result, int numOfBlackStone, int numOfWhiteStone) {
 
 	switch (result) {
 		case 1:
@@ -49,4 +49,7 @@ void show_winner(int result) {
 			cout << "接戦でしたね。引き分けです" << endl;
 			break;
 	}
+
+	cout << "黒石の数：" << numOfBlackStone << endl;
+	cout << "白石の数：" << numOfWhiteStone << endl;
 }

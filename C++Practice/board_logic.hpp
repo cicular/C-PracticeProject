@@ -29,7 +29,7 @@ void place_stone(Board& board, int x_input, int y_input, Player player);
 bool is_board_full(Board& board, Player* player);
 
 // ゲームの勝者を判定（黒石の数/白石の数を数える）※メソッド名と戻り値は変えないでください。引数は変更可
-int judge_winner(Board& board);
+int judge_winner(Board& board, int* numOfBlackStone, int *numOfWhiteStone);
 
 // ※必要に応じてメソッドの追加可
 

@@ -69,8 +69,8 @@ bool is_legal_move(Board& board, int x_int, int y_int, Player player, bool conso
 					if (board[xxi][yyi] == allyStone) {
 						return true;
 					}
-					// 番兵にぶつかったら終端なのでループを抜ける
-					if (board[xxi][yyi] == Cell::Sentinel) break;
+					// 番兵または空白セルぶつかったら終端なのでループを抜ける
+					if (board[xxi][yyi] == Cell::Sentinel || board[xxi][yyi] == Cell::Empty) break;
 				}
 			}
 		}
@@ -206,18 +206,18 @@ bool is_board_full(Board& board, Player* player) {
 }
 
 // 勝者判定
-int judge_winner(Board& board) {
+int judge_winner(Board& board, int* numOfBlackStone, int *numOfWhiteStone) {
 
-	int numOfBlack = 0;
-	int numOfWhite = 0;
 	for (int x = 1; x < 9; x++) {
 		for (int y = 1; y < 9; y++) {
-			if (board[x][y] == Cell::Black) numOfBlack++;
-			if (board[x][y] == Cell::White) numOfWhite++;
+			// *numOfWhiteStone++;と書くと、
+			// numOfWhiteStone（アドレス）が1つ先（+sizeof(int) バイト）に進んでしまうので誤り
+			if (board[x][y] == Cell::Black) (*numOfBlackStone)++;
+			if (board[x][y] == Cell::White) (*numOfWhiteStone)++;
 		}
 	}
 
-	return numOfBlack == numOfWhite ? 0 : numOfWhite < numOfBlack ? 1 : 2;
+	return *numOfBlackStone == *numOfWhiteStone ? 0 : *numOfWhiteStone < *numOfBlackStone ? 1 : 2;
 
 }
 
