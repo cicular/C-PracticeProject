@@ -4,15 +4,15 @@
 #include <map>
 #include "board_view.hpp"
 #include "board_logic.hpp"
+#include "game_test.hpp"
 
 using namespace std;
 
-// 関数プロトタイプ
-map<int, string> makeTestGameData1(string moves);
-
 int main() {
 
-	map<int, string> kifuMap = makeTestGameData1("f5d6c5f4d7f6d3c3e3f3d2c4b5c6b6e2b4a5f2a4b3a6g4a3e6d1e1c2c1g3h3g5g6h4h5a7a2a1b7a8c7b2b1c8b8d8e8f8e7g2f1g1h1h2f7h6g7g8");
+	// f5d6c5f4d7f6d3c3e3f3d2c4b5c6b6e2b4a5f2a4b3a6g4a3e6d1e1c2c1g3h3g5g6h4h5a7a2a1b7a8c7b2b1c8b8d8e8f8e7g2f1g1h1h2f7h6g7g8
+	// F5D6C3F3C5C6D3F4E7B5B6D2E1D1F2F1F6B4A5G7G5A7A3B7A8B8C8H5H6G2H1H3H2G3H4C7A6F8B2A1C1B1G4B3C2C4A2A4D8E3G1E6D7E8G8F7H8H7E2G6
+	map<int, string> kifuMap = makeTestGameData("F5D6C3F3C5C6D3F4E7B5B6D2E1D1F2F1F6B4A5G7G5A7A3B7A8B8C8H5H6G2H1H3H2G3H4C7A6F8B2A1C1B1G4B3C2C4A2A4D8E3G1E6D7E8G8F7H8H7E2G6");
 
 	system("color f0");
 
@@ -67,18 +67,4 @@ int main() {
 	show_winner(judge_winner(board));
 
 	return 0;
-}
-
-map<int, string> makeTestGameData1(string moves) {
-
-	map<int, string> map;
-
-	int key = 1;
-	for (int i = 0; i < moves.size();i+=2) {
-		// cout << moves.substr(i, 2) << endl;
-		map.insert(make_pair(key, moves.substr(i,2)));
-		key++;
-	}
-
-	return map;
 }
