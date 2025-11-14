@@ -31,7 +31,7 @@ void init_board(Board& board) {
 /*
 	合法手判定
 */
-bool is_legal_move(Board& board, int x_int, int y_int, Player player) {
+bool is_legal_move(const Board& board, int x_int, int y_int, Player player) {
 
 	if (x_int == -1 || y_int < 1 || y_int > 8) return false;
 
@@ -149,10 +149,9 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 	std::cout << std::to_string(reverseCellsVector.size() - 1) << "個のセルを反転させました。" << std::endl;
 }
 
-bool is_board_full(Board& board) {
+bool is_board_full(const Board& board) {
 
-	// 64マス全て埋まった場合に「パスします」メッセージを出さないためにまずは全件チェック
-	int numOfEmpty = 0;
+	// 空きマスが1つでもあれば false、なければ true
 	for (int x = 1; x < 9; x++) {
 		for (int y = 1; y < 9; y++) {
 			if (board[x][y] == Cell::Empty) {
@@ -165,7 +164,7 @@ bool is_board_full(Board& board) {
 }
 
 // 勝者判定
-int judge_winner(Board& board, int* numOfBlackStone, int *numOfWhiteStone) {
+int judge_winner(const Board& board, int* numOfBlackStone, int *numOfWhiteStone) {
 
 	for (int x = 1; x < 9; x++) {
 		for (int y = 1; y < 9; y++) {
@@ -181,7 +180,7 @@ int judge_winner(Board& board, int* numOfBlackStone, int *numOfWhiteStone) {
 }
 
 // 文字コードを利用してint型に変換
-int convert_alphabet_to_num(std::string input) {
+int convert_alphabet_to_num(const std::string input) {
 
 	char x_alphabet = toupper(input.front());
 
@@ -192,12 +191,12 @@ int convert_alphabet_to_num(std::string input) {
 
 }
 
-bool has_any_legal_move(Board& board, Player* player) {
+bool has_any_legal_move(const Board& board, Player player) {
 
 	for (int x = 1; x < 9; x++) {
 		for (int y = 1; y < 9; y++) {
 			if (board[x][y] == Cell::Empty) {
-				if (is_legal_move(board, x, y, *player)) {
+				if (is_legal_move(board, x, y, player)) {
 					// まだ石を置ける座標があった
 					return true;
 				}

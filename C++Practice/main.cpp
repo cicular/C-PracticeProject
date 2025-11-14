@@ -30,12 +30,12 @@ int main() {
 	// 終局までループ
 	while (!is_board_full(board)) {
 
-		if (!has_any_legal_move(board, &player)) {
+		if (!has_any_legal_move(board, player)) {
 			// 手番を変更
 			show_pass_msg();
 			player = player == Player::Black ? Player::White : Player::Black;
 			// 黒・白ともに石を置けるセルが存在しないため、対局終了
-			if (!has_any_legal_move(board, &player)) break;
+			if (!has_any_legal_move(board, player)) break;
 		}
 
 		// コマンドプロンプトクリア

@@ -16,19 +16,19 @@ using Board = std::array<std::array<Cell, 10>, 10>;
 void init_board(Board& board);
 
 // 合法手判定（合法手ならtrueを返し、不正手ならfalseを返す）
-bool is_legal_move(Board& board, int x_input, int y_input, Player player);
+bool is_legal_move(const Board& board, int x_input, int y_input, Player player);
 
 // 石を配置し、ひっくり返す
 void place_stone(Board& board, int x_input, int y_input, Player player);
 
 // 終了（満盤）判定（64マス内にEmptyがあるか判定。Emptyが0個ならtrue）
-bool is_board_full(Board& board);
+bool is_board_full(const Board& board);
 
 // ゲームの勝者を判定（黒石の数/白石の数を数える）
-int judge_winner(Board& board, int* numOfBlackStone, int *numOfWhiteStone);
+int judge_winner(const Board& board, int* numOfBlackStone, int *numOfWhiteStone);
 
 // アルファベットから数字に変換
-int convert_alphabet_to_num(std::string input);
+int convert_alphabet_to_num(const std::string input);
 
-// まだ合法手が存在するか確認（まだ石を置けるセルがあればtrue）
-bool has_any_legal_move(Board& board, Player* player);
+// まだEmptyのセルがあればtrue
+bool has_any_legal_move(const Board& board, Player player);
