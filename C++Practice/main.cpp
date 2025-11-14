@@ -14,7 +14,7 @@
 int main() {
 
 #ifdef TEST
-	std::map<int, std::string> kifuMap = makeTestGameData(TEST_KIFU1);
+	std::map<int, std::string> kifuMap = makeTestGameData(TEST_KIFU3);
 	int moveCount = 0;
 #endif
 
@@ -32,7 +32,7 @@ int main() {
 
 		if (!has_any_legal_move(board, &player)) {
 			// 手番を変更
-			std::cout << "石を置けるセルがないため、パスします" << std::endl;
+			show_pass_msg();
 			player = player == Player::Black ? Player::White : Player::Black;
 			// 黒・白ともに石を置けるセルが存在しないため、対局終了
 			if (!has_any_legal_move(board, &player)) break;

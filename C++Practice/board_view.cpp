@@ -55,3 +55,7 @@ void show_winner(int result, int numOfBlackStone, int numOfWhiteStone) {
 void show_illegal_move_msg() {
 	std::cout << "：" << "不正な手なので、再入力してくださいね？？" << std::endl;
 }
+
+void show_pass_msg() {
+	std::cout << "：" << "石を置けるセルがないため、パスします" << std::endl;
+}

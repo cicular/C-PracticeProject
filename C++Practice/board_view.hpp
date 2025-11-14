@@ -16,3 +16,6 @@ void show_winner(int result, int numOfBlackStone, int numOfWhiteStone);
 
 // 不正手を入力された場合のメッセージを表示
 void show_illegal_move_msg();
+
+// 置ける石がない場合、パスする旨のメッセージを表示
+void show_pass_msg();

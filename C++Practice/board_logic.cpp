@@ -149,7 +149,6 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 	std::cout << std::to_string(reverseCellsVector.size() - 1) << "個のセルを反転させました。" << std::endl;
 }
 
-// 黒/白ともに打てるセルが存在しなくなったか判定
 bool is_board_full(Board& board) {
 
 	// 64マス全て埋まった場合に「パスします」メッセージを出さないためにまずは全件チェック
@@ -157,12 +156,12 @@ bool is_board_full(Board& board) {
 	for (int x = 1; x < 9; x++) {
 		for (int y = 1; y < 9; y++) {
 			if (board[x][y] == Cell::Empty) {
-				numOfEmpty++;
+				return false;
 			}
 		}
 	}
 
-	return numOfEmpty == 0 ? true : false;
+	return true;
 }
 
 // 勝者判定
