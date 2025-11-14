@@ -150,7 +150,7 @@ void place_stone(Board& board, int x_int, int y_int, Player player) {
 }
 
 // 黒/白ともに打てるセルが存在しなくなったか判定
-bool is_board_full(Board& board, Player* player) {
+bool is_board_full(Board& board) {
 
 	// 64マス全て埋まった場合に「パスします」メッセージを出さないためにまずは全件チェック
 	int numOfEmpty = 0;
@@ -162,36 +162,7 @@ bool is_board_full(Board& board, Player* player) {
 		}
 	}
 
-	if (numOfEmpty == 0) return true;
-
-	for (int x = 1; x < 9; x++) {
-		for (int y = 1; y < 9; y++) {
-			if (board[x][y] == Cell::Empty) {
-				if (is_legal_move(board, x, y, *player)) {
-					// まだ石を置ける座標があった
-					return false;
-				}
-			}
-		}
-	}
-
-	// 手番を変更
-	std::cout << "石を置けるセルがないため、パスします" << std::endl;
-	*player = *player == Player::Black ? Player::White : Player::Black;
-
-	for (int x = 1; x < 9; x++) {
-		for (int y = 1; y < 9; y++) {
-			if (board[x][y] == Cell::Empty) {
-				if (is_legal_move(board, x, y, *player)) {
-					// まだ石を置ける座標があった
-					return false;
-				}
-			}
-		}
-	}
-
-	// 黒・白ともに石を置けるセルが存在しないため、対局終了
-	return true;
+	return numOfEmpty == 0 ? true : false;
 }
 
 // 勝者判定
@@ -222,8 +193,18 @@ int convert_alphabet_to_num(std::string input) {
 
 }
 
-int get_y_input(std::string input) {
+bool has_any_legal_move(Board& board, Player* player) {
 
-	// int型に変換して返却
-	return stoi(input.substr(1, 2));
+	for (int x = 1; x < 9; x++) {
+		for (int y = 1; y < 9; y++) {
+			if (board[x][y] == Cell::Empty) {
+				if (is_legal_move(board, x, y, *player)) {
+					// まだ石を置ける座標があった
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
 }

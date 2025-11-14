@@ -14,7 +14,7 @@
 int main() {
 
 #ifdef TEST
-	std::map<int, std::string> kifuMap = makeTestGameData(TEST_KIFU2);
+	std::map<int, std::string> kifuMap = makeTestGameData(TEST_KIFU1);
 	int moveCount = 0;
 #endif
 
@@ -28,7 +28,15 @@ int main() {
 	init_board(board);
 
 	// 終局までループ
-	while (!is_board_full(board, &player)) {
+	while (!is_board_full(board)) {
+
+		if (!has_any_legal_move(board, &player)) {
+			// 手番を変更
+			std::cout << "石を置けるセルがないため、パスします" << std::endl;
+			player = player == Player::Black ? Player::White : Player::Black;
+			// 黒・白ともに石を置けるセルが存在しないため、対局終了
+			if (!has_any_legal_move(board, &player)) break;
+		}
 
 		// コマンドプロンプトクリア
 		//clear_screen();
@@ -54,7 +62,7 @@ int main() {
 			std::cin >> input;
 #endif
 			x_input = convert_alphabet_to_num(input);
-			y_input = get_y_input(input);
+			y_input = stoi(input.substr(1, 2));
 
 			legal_move_flg = is_legal_move(board, x_input, y_input, player);
 			if (!legal_move_flg) show_illegal_move_msg();

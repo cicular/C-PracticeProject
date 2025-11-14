@@ -21,12 +21,14 @@ bool is_legal_move(Board& board, int x_input, int y_input, Player player);
 // 石を配置し、ひっくり返す
 void place_stone(Board& board, int x_input, int y_input, Player player);
 
-// 終了（満盤）判定（石が置けるマスがあるか判定。満盤ならtrue）
-bool is_board_full(Board& board, Player* player);
+// 終了（満盤）判定（64マス内にEmptyがあるか判定。Emptyが0個ならtrue）
+bool is_board_full(Board& board);
 
 // ゲームの勝者を判定（黒石の数/白石の数を数える）
 int judge_winner(Board& board, int* numOfBlackStone, int *numOfWhiteStone);
 
+// アルファベットから数字に変換
 int convert_alphabet_to_num(std::string input);
 
-int get_y_input(std::string input);
+// まだ合法手が存在するか確認（まだ石を置けるセルがあればtrue）
+bool has_any_legal_move(Board& board, Player* player);
