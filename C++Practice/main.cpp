@@ -39,7 +39,7 @@ int main() {
 		}
 
 		// コマンドプロンプトクリア
-		//clear_screen();
+		clear_screen();
 		
 		// 盤面の表示
 		show_board(board);
@@ -73,6 +73,8 @@ int main() {
 		player = player == Player::Black ? Player::White : Player::Black;
 
 	}
+	clear_screen();
+
 	// 盤面の表示
 	show_board(board);
 

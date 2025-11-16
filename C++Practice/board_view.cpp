@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 #include "board_view.hpp"
 
 // 盤面の表示
@@ -58,4 +59,7 @@ void show_illegal_move_msg() {
 
 void show_pass_msg() {
 	std::cout << "：" << "石を置けるセルがないため、パスします" << std::endl;
+}
+void clear_screen() {
+	std::system("cls");//画面クリア
 }
