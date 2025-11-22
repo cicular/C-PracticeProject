@@ -14,7 +14,7 @@
 int main() {
 
 #ifdef TEST
-	std::map<int, std::string> kifuMap = makeTestGameData(TEST_KIFU3);
+	std::map<int, std::string> kifuMap = makeTestGameData(TEST_KIFU5);
 	int moveCount = 0;
 #endif
 
