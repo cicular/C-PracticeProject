@@ -1,11 +1,9 @@
 #include "game_test.hpp"
 
-using namespace std;
-
 // テスト用関数
-map<int, string> makeTestGameData(string moves) {
+std::map<int, std::string> makeTestGameData(std::string moves) {
 
-	map<int, string> map;
+	std::map<int, std::string> map;
 
 	int key = 1;
 	for (size_t i = 0; i < moves.size(); i += 2) {
